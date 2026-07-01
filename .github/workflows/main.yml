@@ -32,21 +32,23 @@ jobs:
         pip install --upgrade pip
         pip install buildozer cython virtualenv
 
-    # Автоматически принимаем все лицензии Android SDK, чтобы сборка не ждала нажатия клавиш
+    # Автоматически принимаем все лицензии Android SDK
     - name: Accept Android SDK Licenses
       run: |
         mkdir -p ~/.android
         touch ~/.android/repositories.cfg
-        # Создаем пустую команду для инициализации buildozer и скачивания SDK
         buildozer android licenses || true
-        # Принудительно соглашаемся со всеми лицензиями в папке SDK
         if [ -d "$HOME/.buildozer/android/platform/android-sdk/tools/bin" ]; then
           yes | $HOME/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager --licenses || true
         fi
 
+    # Стираем капризные переменные окружения GitHub, чтобы принудительно использовать наш NDK 25b
     - name: Build with Buildozer
+      env:
+        ANDROID_NDK_HOME: ""
+        ANDROID_NDK_LATEST_HOME: ""
+        ANDROID_NDK: ""
       run: |
-        # Запускаем сборку с флагом автоматического принятия лицензий внутри самого buildozer
         yes | buildozer android debug
 
     - name: Upload APK Artifact
