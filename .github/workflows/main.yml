@@ -18,13 +18,13 @@ jobs:
       with:
         python-version: '3.10'
 
-    # Скачиваем архив через надежный инструмент gdown
-    - name: Download project archive from Google Drive
+    # Скачиваем архив напрямую с Яндекс Диска
+    - name: Download project archive from Yandex Disk
       run: |
-        pip install gdown
-        gdown --id 1Wfp9cb798Q1Wq3sSgc1CA8V7oiONiwUO -O project.zip
+        curl -L "https://yandex.net" -o project.zip || \
+        curl -L "https://yandex.net" | grep -o 'https://[^"]*' | head -n 1 | xargs curl -L -o project.zip
         
-        # Распаковываем
+        # Распаковываем файлы
         unzip -o project.zip
         rm project.zip
 
