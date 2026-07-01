@@ -18,23 +18,31 @@ jobs:
       with:
         python-version: '3.10'
 
-    # Скачиваем новый архив с Яндекс Диска с помощью надежного Python-скрипта
+    # Скачиваем архив с Яндекс Диска с защитой от сбоев интернета
     - name: Download project archive from Yandex Disk
       run: |
         python3 -c "
-        import urllib.request, json, os
-        pk = 'https://disk.yandex.ru/d/dKQP_1mhySRrAQ'
+        import urllib.request, json, os, time
+        pk = 'https://yandex.ru'
         api_url = f'https://yandex.net{pk}'
-        try:
-            req = urllib.request.urlopen(api_url)
-            data = json.loads(req.read().decode())
-            download_url = data['href']
-            print('Скачиваю файл...')
-            urllib.request.urlretrieve(download_url, 'project.zip')
-            print('Файл успешно скачан!')
-        except Exception as e:
-            print('Ошибка при скачивании:', e)
-            exit(1)
+        
+        # Пробуем 3 раза на случай сбоев сети GitHub
+        for attempt in range(3):
+            try:
+                print(f'Попытка скачивания {attempt + 1}...')
+                req = urllib.request.urlopen(api_url)
+                data = json.loads(req.read().decode())
+                download_url = data['href']
+                urllib.request.urlretrieve(download_url, 'project.zip')
+                print('Файл успешно скачан!')
+                break
+            except Exception as e:
+                print('Временная ошибка сети:', e)
+                if attempt < 2:
+                    time.sleep(5)
+                else:
+                    print('Все попытки исчерпаны.')
+                    exit(1)
         "
         
         # Распаковываем файлы
