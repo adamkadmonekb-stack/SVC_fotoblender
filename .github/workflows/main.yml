@@ -30,17 +30,6 @@ jobs:
       with:
         python-version: '3.10'
 
-    # ВСТАВЛЯЕМ СЮДА: Включаем умное кэширование папки Buildozer
-    - name: Cache Buildozer global directory
-      uses: actions/cache@v4
-      with:
-        path: |
-          ~/.buildozer
-          .buildozer
-        key: ${{ runner.os }}-buildozer-${{ hashFiles('buildozer.spec') }}
-        restore-keys: |
-          ${{ runner.os }}-buildozer-
-
     # Распаковываем ваш многотомный архив прямо из репозитория
     - name: Extract multi-part RAR archive
       run: |
