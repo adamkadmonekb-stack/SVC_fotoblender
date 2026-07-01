@@ -18,24 +18,24 @@ jobs:
       with:
         python-version: '3.10'
 
-    # Скачиваем архив через чистый curl по прямой ссылке
-    - name: Download project archive from Google Drive
+    # Скачиваем новый архив с Яндекс Диска с помощью надежного Python-скрипта
+    - name: Download project archive from Yandex Disk
       run: |
-        FILE_ID="14BMDDdiNjy8LYWqxUUef3schpMJ2GyiL"
-        echo "Скачиваем файл с ID: $FILE_ID"
-        
-        # Скачиваем страницу подтверждения для больших файлов
-        curl -sc /tmp/cookie "https://google.com{FILE_ID}" > /tmp/confirm.html
-        
-        # Вытаскиваем код подтверждения, если он есть
-        CONFIRM=$(grep -o 'confirm=[^&]*' /tmp/confirm.html | head -n 1 | cut -d= -f2)
-        
-        # Качаем сам архив приложения
-        if [ -n "$CONFIRM" ]; then
-          curl -Lb /tmp/cookie "https://google.com{CONFIRM}&id=${FILE_ID}" -o project.zip
-        else
-          curl -Lb /tmp/cookie "https://google.com{FILE_ID}" -o project.zip
-        fi
+        python3 -c "
+        import urllib.request, json, os
+        pk = 'https://disk.yandex.ru/d/dKQP_1mhySRrAQ'
+        api_url = f'https://yandex.net{pk}'
+        try:
+            req = urllib.request.urlopen(api_url)
+            data = json.loads(req.read().decode())
+            download_url = data['href']
+            print('Скачиваю файл...')
+            urllib.request.urlretrieve(download_url, 'project.zip')
+            print('Файл успешно скачан!')
+        except Exception as e:
+            print('Ошибка при скачивании:', e)
+            exit(1)
+        "
         
         # Распаковываем файлы
         unzip -o project.zip
