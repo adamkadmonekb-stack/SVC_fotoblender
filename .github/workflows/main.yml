@@ -18,35 +18,24 @@ jobs:
       with:
         python-version: '3.10'
 
-    # Скачиваем архив через надежный скрипт Python
+    # Скачиваем архив через чистый curl по прямой ссылке
     - name: Download project archive from Google Drive
       run: |
-        python3 -c "
-        import urllib.request, re
-        url = 'https://google.com'
-        file_id = re.search(r'/d/([a-zA-Z0-9_-]+)', url).group(1)
-        confirm_url = f'https://google.com{file_id}'
+        FILE_ID="14BMDDdiNjy8LYWqxUUef3schpMJ2GyiL"
+        echo "Скачиваем файл с ID: $FILE_ID"
         
-        # Запрашиваем страницу подтверждения для больших файлов
-        req = urllib.request.Request(confirm_url, headers={'User-Agent': 'Mozilla/5.0'})
-        try:
-            with urllib.request.urlopen(req) as response:
-                html = response.read().decode('utf-8', errors='ignore')
-                confirm_match = re.search(r'confirm=([a-zA-Z0-9_-]+)', html)
-                
-                if confirm_match:
-                    confirm_code = confirm_match.group(1)
-                    download_url = f'https://google.com{confirm_code}&id={file_id}'
-                else:
-                    download_url = confirm_url
-                    
-            print('Скачиваю архив приложения...')
-            urllib.request.urlretrieve(download_url, 'project.zip')
-            print('Архив успешно скачан!')
-        except Exception as e:
-            print('Ошибка при скачивании файла:', e)
-            exit(1)
-        "
+        # Скачиваем страницу подтверждения для больших файлов
+        curl -sc /tmp/cookie "https://google.com{FILE_ID}" > /tmp/confirm.html
+        
+        # Вытаскиваем код подтверждения, если он есть
+        CONFIRM=$(grep -o 'confirm=[^&]*' /tmp/confirm.html | head -n 1 | cut -d= -f2)
+        
+        # Качаем сам архив приложения
+        if [ -n "$CONFIRM" ]; then
+          curl -Lb /tmp/cookie "https://google.com{CONFIRM}&id=${FILE_ID}" -o project.zip
+        else
+          curl -Lb /tmp/cookie "https://google.com{FILE_ID}" -o project.zip
+        fi
         
         # Распаковываем файлы
         unzip -o project.zip
