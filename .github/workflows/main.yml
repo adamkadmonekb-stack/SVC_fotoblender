@@ -18,26 +18,13 @@ jobs:
       with:
         python-version: '3.10'
 
-    # Скачиваем архив с Яндекс Диска с помощью надежного Python-скрипта
-    - name: Download project archive from Yandex Disk
+    # Скачиваем обновленный архив с Google Диска
+    - name: Download project archive from Google Drive
       run: |
-        python3 -c "
-        import urllib.request, json, os
-        pk = 'https://yandex.ru'
-        api_url = f'https://yandex.net{pk}'
-        try:
-            req = urllib.request.urlopen(api_url)
-            data = json.loads(req.read().decode())
-            download_url = data['href']
-            print('Скачиваю файл...')
-            urllib.request.urlretrieve(download_url, 'project.zip')
-            print('Файл успешно скачан!')
-        except Exception as e:
-            print('Ошибка при скачивании:', e)
-            exit(1)
-        "
+        pip install gdown
+        gdown --fuzzy "https://drive.google.com/file/d/14BMDDdiNjy8LYWqxUUef3schpMJ2GyiL/view?usp=sharing" -O project.zip
         
-        # Распаковываем файлы
+        # Рапаспаковываем
         unzip -o project.zip
         rm project.zip
 
