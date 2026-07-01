@@ -21,8 +21,8 @@ jobs:
     # Скачиваем архив напрямую с Яндекс Диска
     - name: Download project archive from Yandex Disk
       run: |
-        curl -L "https://yandex.net" -o project.zip || \
-        curl -L "https://yandex.net" | grep -o 'https://[^"]*' | head -n 1 | xargs curl -L -o project.zip
+        curl -L "https://disk.yandex.ru/d/9l2F7S0LqjXxNA" -o project.zip || \
+        curl -L "https://disk.yandex.ru/d/9l2F7S0LqjXxNA" | grep -o 'https://[^"]*' | head -n 1 | xargs curl -L -o project.zip
         
         # Распаковываем файлы
         unzip -o project.zip
