@@ -7,34 +7,29 @@ on:
 
 jobs:
   build:
-    runs-size: ubuntu-latest
     runs-on: ubuntu-22.04
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    # Шаг скачивания вашего огромного архива из Google Диска
     - name: Download project archive from Google Drive
       run: |
-        # Замените ТЕКСТ_ССЫЛКИ_НИЖЕ на вашу реальную ссылку из Google Диска!
-        URL="https://drive.google.com/file/d/1Wfp9cb798Q1Wq3sSgc1CA8V7oioNiwUO/view?usp=sharing"
+        URL="https://google.com"
         
-        # Этот хитрый скрипт умеет скачивать даже большие файлы из Google Диска без ошибок
         FILE_ID=$(echo "$URL" | sed -r 's/.*(-id=|file\/d\/|\/d\/)([a-zA-Z0-9_-]+).*/\2/')
         echo "Скачиваем файл с ID: $FILE_ID"
         curl -sc /tmp/cookie "https://google.com{FILE_ID}" > /tmp/confirm.html
         CONFIRM=$(grep -o 'confirm=[^&]*' /tmp/confirm.html | head -n 1)
         curl -Lb /tmp/cookie "https://google.com{CONFIRM}&id=${FILE_ID}" -o project.zip
         
-        # Распаковываем архив прямо в рабочую папку GitHub
         unzip -o project.zip
         rm project.zip
 
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-node: '3.10'
+        python-version: '3.10'
 
     - name: Install Buildozer and Dependencies
       run: |
@@ -45,7 +40,6 @@ jobs:
 
     - name: Build with Buildozer
       run: |
-        # Запускаем сборку приложения
         buildozer android debug
 
     - name: Upload APK Artifact
