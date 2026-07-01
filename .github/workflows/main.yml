@@ -18,40 +18,20 @@ jobs:
       with:
         python-version: '3.10'
 
-    # Скачиваем архив с Яндекс Диска с защитой от сбоев интернета
-    - name: Download project archive from Yandex Disk
+    # Распаковываем ваш многотомный архив прямо из репозитория
+    - name: Extract multi-part RAR archive
       run: |
-        python3 -c "
-        import urllib.request, json, os, time
-        pk = 'https://yandex.ru'
-        api_url = f'https://yandex.net{pk}'
+        sudo apt-get update
+        sudo apt-get install -y unrar
         
-        # Пробуем 3 раза на случай сбоев сети GitHub
-        for attempt in range(3):
-            try:
-                print(f'Попытка скачивания {attempt + 1}...')
-                req = urllib.request.urlopen(api_url)
-                data = json.loads(req.read().decode())
-                download_url = data['href']
-                urllib.request.urlretrieve(download_url, 'project.zip')
-                print('Файл успешно скачан!')
-                break
-            except Exception as e:
-                print('Временная ошибка сети:', e)
-                if attempt < 2:
-                    time.sleep(5)
-                else:
-                    print('Все попытки исчерпаны.')
-                    exit(1)
-        "
+        # Распаковываем первую часть (остальные подтянутся сами)
+        unrar x -o+ "СВЧ.part1.rar"
         
-        # Распаковываем файлы
-        unzip -o project.zip
-        rm project.zip
+        # Удаляем архивы, чтобы они не занимали место
+        rm -f "СВЧ.part"*.rar
 
     - name: Install Buildozer and Dependencies
       run: |
-        sudo apt-get update
         sudo apt-get install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev libsqlite3-dev tk-dev libgdbm-compat-dev liblzma-dev lzma
         pip install --upgrade pip
         pip install buildozer cython virtualenv
