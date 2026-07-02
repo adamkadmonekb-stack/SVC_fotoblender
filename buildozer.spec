@@ -1,13 +1,13 @@
 [app]
 
 # (str) Название приложения на экране вашего планшета
-title = RNA325KHz
+title = rnakhz
 
 # (str) Имя пакета БЕЗ точек и пробелов (только латиница!)
-package.name = 64rna325khz
+package.name = rnakhz
 
 # (str) Домен (уникальное слово латиницей)
-package.domain = com.325
+package.domain = com.rna
 
 # (str) Папка исходного кода
 source.dir = .
