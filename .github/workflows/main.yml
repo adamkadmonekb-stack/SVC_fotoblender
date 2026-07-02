@@ -53,7 +53,8 @@ jobs:
           yes | $HOME/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager --licenses || true
         fi
 
-    # Запускаем сборку строго на Java 17
+        # Запускаем сборку строго на Java 17 с полной очисткой кэша компилятора
+     scrimmage:
     - name: Build with Buildozer
       env:
         ANDROID_NDK_HOME: ""
@@ -61,7 +62,11 @@ jobs:
         ANDROID_NDK: ""
         JAVA_HOME: /usr/lib/jvm/temurin-17-jdk-amd64
       run: |
-        yes | buildozer android debug
+        # Полностью удаляем старые неудачные сборки libwebp и sdl2
+        buildozer android clean
+        
+        # Запускаем чистую сборку и автоматически принимаем всё
+        buildozer --auto-accept android debug
 
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
