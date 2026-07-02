@@ -19,7 +19,7 @@ source.include_exts = py,png,jpg,kv,atlas,json
 version = 0.3
 
 # === ИСПРАВЛЕННАЯ СТРОКА ЗАВИСИМОСТЕЙ (Убрали Python 3.14!) ===
-requirements = python3==3.11, kivy, pillow==10.2.0, plyer, hostpython3
+requirements = python3, kivy, pillow==10.2.0, plyer, hostpython3
 
 # (str) Ориентация экрана
 orientation = portrait
@@ -36,6 +36,8 @@ android.permissions = INTERNET, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE
 
 # (int) Целевой Android API. Ставим стабильный 33
 android.api = 33
+
+android.python_version = 3.11
 
 # (int) Минимальная поддерживаемая версия (Android 7.0)
 android.minapi = 24
