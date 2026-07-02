@@ -1,13 +1,13 @@
 [app]
 
 # (str) Название приложения на экране вашего планшета
-title = SVC Fotoblender
+title = RNA325KHz
 
 # (str) Имя пакета БЕЗ точек и пробелов (только латиница!)
-package.name = svclabblender
+package.name = 64rna325khz
 
 # (str) Домен (уникальное слово латиницей)
-package.domain = com.newsvch
+package.domain = com.325
 
 # (str) Папка исходного кода
 source.dir = .
@@ -33,6 +33,8 @@ fullscreen = 1
 
 # (list) Разрешения для работы с галереей и фото
 android.permissions = INTERNET, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE
+
+android.manifest.application_arguments = android:requestLegacyExternalStorage="true"
 
 # (int) Целевой Android API. Ставим стабильный 33
 android.api = 33
