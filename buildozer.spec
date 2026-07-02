@@ -1,5 +1,3 @@
-[app]
-
 # (str) Название приложения на экране вашего планшета
 title = rnakhz
 
@@ -12,14 +10,14 @@ package.domain = com.rna
 # (str) Папка исходного кода
 source.dir = .
 
-# (list) Включаем расширения файлов картинок, чтобы 62 фото упаковались внутрь
+# (list) Включаем расширения файлов картинок, чтобы все фото упаковались внутрь APK
 source.include_exts = py,png,jpg,kv,atlas,json
 
 # (str) Версия вашего приложения
 version = 0.3
 
-# === ИСПРАВЛЕННАЯ СТРОКА ЗАВИСИМОСТЕЙ (Убрали Python 3.14!) ===
-requirements = python3, kivy, pillow==10.2.0, plyer, hostpython3
+# === 🏆 ИСПРАВЛЕННАЯ И ЗАЩИЩЕННАЯ СТРОКА ЗАВИСИМОСТЕЙ: ===
+requirements = python3, kivy, pillow, plyer, pyjnius, android
 
 # (str) Ориентация экрана
 orientation = portrait
@@ -34,9 +32,10 @@ fullscreen = 1
 # (list) Разрешения для работы с галереей и фото
 android.permissions = INTERNET, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE
 
-android.manifest.application_arguments = android:requestLegacyExternalStorage="true"
+# 👑 ПРАВИЛЬНЫЙ СПОСОБ ВКЛЮЧИТЬ LEGACY-ДОСТУП К ПАМЯТИ НА ANDROID 10:
+android.manifest.xml_attribute = android:requestLegacyExternalStorage="true"
 
-# (int) Целевой Android API. Ставим стабильный 33
+# (int) Целевой Android API. Оставляем стабильный 33
 android.api = 33
 
 android.python_version = 3.11
@@ -56,7 +55,7 @@ android.accept_sdk_license = True
 # (bool) Использовать private директорию
 android.private_storage = True
 
-# (list) Архитектуры процессоров под ваш планшет Lenovo
+# (list) Архитектуры процессоров под ваш планшет Lenovo и другие телефоны
 android.archs = arm64-v8a, armeabi-v7a
 
 # ==============================================================================
