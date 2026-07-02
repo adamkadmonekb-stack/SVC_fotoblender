@@ -20,13 +20,13 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
 
-    # Настраиваем Python (оставили один шаг вместо двух)
+    # Настраиваем стабильный Python 3.11
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.10'
+        python-version: '3.11'
 
-    # Распаковываем ваш многотомный архив прямо из репозитория
+    # Автоматически распаковываем ваши 62 картинки и main.py из 4 частей архива RAR
     - name: Extract multi-part RAR archive
       run: |
         sudo apt-get update
@@ -34,11 +34,10 @@ jobs:
         unrar x -o+ "СВЧ.part1.rar"
         rm -f "СВЧ.part"*.rar
 
-    # Устанавливаем строго стабильные версии инструментов сборки (добавлен libtool-bin)
+    # Устанавливаем инструменты сборки (добавлен libtool-bin и libwebp-dev)
     - name: Install Buildozer and Dependencies
       run: |
         sudo apt-get install -y git zip unzip python3-pip autoconf libtool libtool-bin pkg-config zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev libsqlite3-dev tk-dev libgdbm-compat-dev liblzma-dev lzma libwebp-dev
-        
         pip install --upgrade pip
         pip install --upgrade buildozer cython virtualenv
         pip install --upgrade python-for-android
@@ -53,7 +52,7 @@ jobs:
           yes | $HOME/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager --licenses || true
         fi
 
-        # Запускаем сборку строго на Java 17 с полной очисткой кэша компилятора
+    # Запускаем сборку без старого кэша
     - name: Build with Buildozer
       env:
         ANDROID_NDK_HOME: ""
@@ -61,12 +60,12 @@ jobs:
         ANDROID_NDK: ""
         JAVA_HOME: /usr/lib/jvm/temurin-17-jdk-amd64
       run: |
-        
         # Запускаем чистую сборку и автоматически принимаем всё
         buildozer --auto-accept android debug
 
+    # Сохраняем готовый APK-файл для скачивания
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: my-app-apk
+        name: svch-app-apk
         path: bin/*.apk
