@@ -58,7 +58,6 @@ jobs:
         JAVA_HOME: /usr/lib/jvm/temurin-17-jdk-amd64
       run: |
         # Стираем старый застрявший кэш Python 3.14
-        buildozer android clean
         
         # Запускаем чистую сборку заново
         python3 -m buildozer --auto-accept android debug
