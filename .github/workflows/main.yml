@@ -54,7 +54,6 @@ jobs:
         fi
 
         # Запускаем сборку строго на Java 17 с полной очисткой кэша компилятора
-     scrimmage:
     - name: Build with Buildozer
       env:
         ANDROID_NDK_HOME: ""
