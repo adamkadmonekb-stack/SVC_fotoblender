@@ -19,7 +19,7 @@ source.include_exts = py,png,jpg,kv,atlas,json
 version = 0.3
 
 # === 🏆 ИСПРАВЛЕННАЯ И ЗАЩИЩЕННАЯ СТРОКА ЗАВИСИМОСТЕЙ: ===
-requirements = python3, kivy, pillow, plyer, pyjnius, android
+requirements = python3, kivy, pillow, android
 
 # (str) Ориентация экрана
 orientation = portrait
@@ -32,9 +32,9 @@ fullscreen = 1
 # ==============================================================================
 
 # (list) Разрешения для работы с галереей и фото
-android.permissions = INTERNET, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE
+android.permissions = READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE
 
-# 👑 ПРАВИЛЬНЫЙ СПОСОБ ВКЛЮЧИТЬ LEGACY-ДОСТУП К ПАМЯТИ НА ANDROID 10:
+# ПРАВИЛЬНЫЙ СПОСОБ ВКЛЮЧИТЬ LEGACY-ДОСТУП К ПАМЯТИ НА ANDROID 10:
 android.manifest.xml_attribute = android:requestLegacyExternalStorage="true"
 
 # (int) Целевой Android API. Оставляем стабильный 33
