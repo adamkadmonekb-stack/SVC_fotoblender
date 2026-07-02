@@ -34,7 +34,7 @@ jobs:
         unrar x -o+ "СВЧ.part1.rar"
         rm -f "СВЧ.part"*.rar
 
-       # Устанавливаем инструменты сборки (добавлен libtool-bin и libwebp-dev)
+    # Устанавливаем инструменты сборки (добавлен libtool-bin и libwebp-dev)
     - name: Install Buildozer and Dependencies
       run: |
         sudo apt-get update
@@ -49,9 +49,9 @@ jobs:
         touch ~/.android/repositories.cfg
         buildozer android licenses || true
 
-    # Запускаем сборку через вызов модуля Python (защита от Broken Pipe)
+    # Запускаем сборку через вызов модуля Python с полной очисткой старого кэша
     - name: Build with Buildozer
-    env:
+      env:
         ANDROID_NDK_HOME: ""
         ANDROID_NDK_LATEST_HOME: ""
         ANDROID_NDK: ""
@@ -63,10 +63,9 @@ jobs:
         # Запускаем чистую сборку заново
         python3 -m buildozer --auto-accept android debug
 
-        # Сохраняем готовый APK-файл для скачивания
-        - name: Upload APK Artifact
-          uses: actions/upload-artifact@v4
-          with:
-            name: svch-app-apk
-            path: bin/*.apk
-
+    # Сохраняем готовый APK-файл для скачивания
+    - name: Upload APK Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: svch-app-apk
+        path: bin/*.apk
